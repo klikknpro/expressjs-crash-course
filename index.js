@@ -1,8 +1,15 @@
 const express = require("express");
 const path = require("path");
 const logger = require("./middleware/logger");
+const exphbs = require("express-handlebars");
 
 const app = express();
+
+// add middleware so "it" knows how to use handlebars
+// ... sure
+// HandleBars Middleware
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // 5. init middleware
 // wtf is middleware
@@ -16,6 +23,19 @@ const app = express();
 // app.get("/", (req, res) => {
 //   res.sendFile(path.join(__dirname, "public", "index.html"));
 // });
+
+// 8. initialize some stuff for the POST as middleware
+// body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// 11. handlebars something lofasz
+// homepage route
+app.get("/", (req, res) =>
+  res.render("index", {
+    title: "member app",
+  })
+);
 
 // 2. create a static server
 // set static folder "public"
